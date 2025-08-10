@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/src/mlruns/242320289103336501/b821b9d3e7bc44528d20aed735a29a02/artifacts
+end_time: 1754830065380
+entry_point_name: ''
+experiment_id: '242320289103336501'
+lifecycle_stage: active
+run_id: b821b9d3e7bc44528d20aed735a29a02
+run_name: logistic_regression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754830058997
+status: 3
+tags: []
+user_id: samulya

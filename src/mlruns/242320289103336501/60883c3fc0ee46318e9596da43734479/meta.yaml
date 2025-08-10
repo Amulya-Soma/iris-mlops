@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/src/mlruns/242320289103336501/60883c3fc0ee46318e9596da43734479/artifacts
+end_time: 1754830068982
+entry_point_name: ''
+experiment_id: '242320289103336501'
+lifecycle_stage: active
+run_id: 60883c3fc0ee46318e9596da43734479
+run_name: random_forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754830065388
+status: 3
+tags: []
+user_id: samulya
