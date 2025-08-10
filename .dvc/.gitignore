@@ -1,3 +1,49 @@
+Python cache
+pycache/
+*.py[cod]
+*.pyo
+*.pyd
+
+Virtual environments
+.venv/
+env/
+venv/
+
+OS/system files
+.DS_Store
+Thumbs.db
+AppData/
+
+Logs & temp files
+*.log
+*.tmp
+
+DVC cache & temp
+.dvc/cache/
+.dvc/tmp/
+.dvc/.lock
+
+Data and models: ignore contents but allow .dvc tracker files
+data/
+!data/.dvc
+!data/**/.dvc
+!data/.gitignore
+
+models/
+!models/.dvc
+!models/**/.dvc
+!models/.gitignore
+
+*.csv
+*.pkl
+*.zip
+
+Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+Hugging Face / ML cache
+.cache/
+transformers_cache/
 /config.local
 /tmp
 /cache
