@@ -7,7 +7,6 @@ import threading
 import webbrowser
 import os
 import logging
-from datetime import datetime
 
 # =========================
 # Logging Setup
@@ -31,11 +30,14 @@ model = joblib.load(MODEL_PATH)
 print("Model loaded successfully.")
 
 # Define request schema using Pydantic
+
+
 class IrisFeatures(BaseModel):
     sepal_length: float
     sepal_width: float
     petal_length: float
     petal_width: float
+
 
 # Mapping to match training column names
 COLUMN_MAPPING = {
@@ -50,6 +52,7 @@ app = FastAPI(title="Iris Prediction API", description="Predict Iris species", v
 
 # In-memory metrics
 metrics = {"prediction_requests": 0}
+
 
 @app.post("/predict")
 def predict(features: IrisFeatures):
@@ -67,14 +70,17 @@ def predict(features: IrisFeatures):
 
     return {"prediction": prediction.tolist()}
 
+
 @app.get("/metrics")
 def get_metrics():
     """Simple metrics endpoint for monitoring"""
     return metrics
-
 # Function to open browser automatically
+
+
 def open_browser():
     webbrowser.open_new("http://127.0.0.1:8000/docs")
+
 
 if __name__ == "__main__":
     threading.Timer(1.0, open_browser).start()
