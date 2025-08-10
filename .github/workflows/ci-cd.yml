@@ -9,57 +9,57 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: "3.9"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
-  - name: Install dependencies
-    run: |
-      pip install --upgrade pip
-      pip install -r src/docker/requirements.txt
-      pip install flake8 pytest
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r src/docker/requirements.txt
+          pip install flake8 pytest
 
-  - name: Lint with flake8 (fatal errors only)
-    run: |
-      flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Lint with flake8 (fatal errors only)
+        run: |
+          flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
 
-  - name: Lint with flake8 (style)
-    run: |
-      flake8 src --count --statistics
+      - name: Lint with flake8 (style)
+        run: |
+          flake8 src --count --statistics
 
-  - name: Run tests (pytest if tests/ exists)
-    run: |
-      if [ -d "tests" ]; then pytest -q; else echo "No tests directory, skipping"; fi
+      - name: Run tests (pytest if tests/ exists)
+        run: |
+          if [ -d "tests" ]; then pytest -q; else echo "No tests directory, skipping"; fi
 
-  - name: Log in to Docker Hub
-    if: ${{ github.ref == 'refs/heads/main' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
-    uses: docker/login-action@v2
-    with:
-      username: ${{ secrets.DOCKER_USERNAME }}
-      password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to Docker Hub
+        if: ${{ github.ref == 'refs/heads/main' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-  - name: Build Docker image
-    run: |
-      IMAGE_NAME=${{ secrets.DOCKER_USERNAME || 'local' }}/iris-api
-      docker build -t $IMAGE_NAME:latest -f src/docker/Dockerfile .
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME || 'local' }}/iris-api
+          docker build -t $IMAGE_NAME:latest -f src/docker/Dockerfile .
 
-  - name: Push Docker image (main only)
-    if: ${{ github.ref == 'refs/heads/main' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
-    run: |
-      IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/iris-api
-      docker tag $IMAGE_NAME:latest $IMAGE_NAME:latest
-      docker push $IMAGE_NAME:latest
+      - name: Push Docker image (main only)
+        if: ${{ github.ref == 'refs/heads/main' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/iris-api
+          docker tag $IMAGE_NAME:latest $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:latest
 
-  - name: Make deploy script executable (if present)
-    run: |
-      if [ -f "src/docker/deploy.sh" ]; then chmod +x src/docker/deploy.sh; fi
+      - name: Make deploy script executable (if present)
+        run: |
+          if [ -f "src/docker/deploy.sh" ]; then chmod +x src/docker/deploy.sh; fi
 
-  - name: Run deploy script (main only, if present)
-    if: ${{ github.ref == 'refs/heads/main' }}
-    run: |
-      if [ -f "src/docker/deploy.sh" ]; then ./src/docker/deploy.sh; else echo "No deploy.sh found, skipping"; fi
+      - name: Run deploy script (main only, if present)
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          if [ -f "src/docker/deploy.sh" ]; then ./src/docker/deploy.sh; else echo "No deploy.sh found, skipping"; fi
