@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/952165351918679791/b7f2b5f04f2e43bbb972176e527bc21f/artifacts
+end_time: 1754820459922
+entry_point_name: ''
+experiment_id: '952165351918679791'
+lifecycle_stage: active
+run_id: b7f2b5f04f2e43bbb972176e527bc21f
+run_name: SVC
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754820456312
+status: 3
+tags: []
+user_id: samulya
