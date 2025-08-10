@@ -25,8 +25,8 @@ DVC cache & temp
 
 Data and models: ignore contents but allow .dvc tracker files
 data/
-!data/.dvc
-!data/**/.dvc
+!data/*.dvc
+!data/**/*.dvc
 !data/.gitignore
 
 models/
