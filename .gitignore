@@ -34,7 +34,7 @@ models/
 !models/**/.dvc
 !models/.gitignore
 
-Optional: ignore common large artifacts (remove if you need to track any)
+Optional: ignore common large artifacts
 *.csv
 *.pkl
 *.zip
