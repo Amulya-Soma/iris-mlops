@@ -1,205 +1,93 @@
 import pandas as pd
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import mlflow
 import mlflow.sklearn
+import joblib
 import os
 
-# Load dataset
-iris = load_iris(as_frame=True)
-df = iris.frame
+# Paths
+DATA_PATH = "data/raw/iris.csv"
+MODEL_DIR = "src/model/iris_model"
+MODEL_PATH = os.path.join(MODEL_DIR, "model.pkl")
 
-# Rename columns to fixed names
-df.columns = ["sepal_length", "sepal_width", "petal_length", "petal_width", "target"]
+def load_data():
+    df = pd.read_csv(DATA_PATH)
 
-X = df.drop("target", axis=1)
-y = df["target"]
+    # Automatically detect target column as last column
+    target_col = df.columns[-1]
+    print(f"Detected target column: {target_col}")
 
-# Split dataset
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X = df.iloc[:, :-1]
+    y = df[target_col]
+    return X, y
 
-# Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
+def log_all_metrics(y_true, y_pred):
+    """Logs multiple classification metrics to MLflow."""
+    acc = accuracy_score(y_true, y_pred)
+    prec = precision_score(y_true, y_pred, average="weighted")
+    rec = recall_score(y_true, y_pred, average="weighted")
+    f1 = f1_score(y_true, y_pred, average="weighted")
+    
+    # Log scalar metrics
+    mlflow.log_metric("accuracy", acc)
+    mlflow.log_metric("precision_weighted", prec)
+    mlflow.log_metric("recall_weighted", rec)
+    mlflow.log_metric("f1_weighted", f1)
 
-# Create folder for saved model
-os.makedirs("model", exist_ok=True)
+    # Log confusion matrix as artifact
+    cm = confusion_matrix(y_true, y_pred)
+    cm_df = pd.DataFrame(cm)
+    cm_path = "confusion_matrix.csv"
+    cm_df.to_csv(cm_path, index=False)
+    mlflow.log_artifact(cm_path)
 
-# Save model locally with MLflow
-mlflow.sklearn.save_model(model, path="model/iris_model")
+    return acc
 
-print("Model trained and saved at model/iris_model")
+def train_and_log_models(X_train, X_test, y_train, y_test):
+    mlflow.set_experiment("iris_classification_Final")
 
+    results = []
 
-# # # src/train.py
-# # import time
-# # import pandas as pd
-# # import mlflow
-# # import mlflow.sklearn
-# # from mlflow.tracking import MlflowClient
-# # from sklearn.model_selection import train_test_split
-# # from sklearn.linear_model import LogisticRegression
-# # from sklearn.tree import DecisionTreeClassifier
-# # from sklearn.ensemble import RandomForestClassifier
-# # from sklearn.metrics import accuracy_score
-# # from utils import save_iris_to_csv   # expects src/utils.py to provide this
-# # import os
+    # Logistic Regression
+    with mlflow.start_run(run_name="logistic_regression"):
+        lr = LogisticRegression(max_iter=200)
+        lr.fit(X_train, y_train)
+        preds = lr.predict(X_test)
+        acc = log_all_metrics(y_test, preds)
 
-# # MLFLOW_TRACKING_URI = "http://127.0.0.1:5000"
-# # EXPERIMENT_NAME = "Iris_Models"
-# # REGISTERED_MODEL_NAME = "IrisClassifier"
-# # CSV_PATH = "data/raw/iris.csv"
+        mlflow.log_param("model", "LogisticRegression")
+        mlflow.sklearn.log_model(lr, "model")
 
+        results.append(("LogisticRegression", lr, acc))
 
-# # def main():
-# #     # Ensure data CSV exists
-# #     save_iris_to_csv(CSV_PATH)
+    # Random Forest
+    with mlflow.start_run(run_name="random_forest"):
+        rf = RandomForestClassifier(n_estimators=50, random_state=42)
+        rf.fit(X_train, y_train)
+        preds = rf.predict(X_test)
+        acc = log_all_metrics(y_test, preds)
 
-# #     # MLflow setup
-# #     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-# #     mlflow.set_experiment(EXPERIMENT_NAME)
-# #     client = MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
+        mlflow.log_param("model", "RandomForestClassifier")
+        mlflow.sklearn.log_model(rf, "model")
 
-# #     # Load data
-# #     df = pd.read_csv(CSV_PATH)
-# #     feature_cols = [c for c in df.columns if c != "target"]
-# #     X = df[feature_cols]
-# #     y = df["target"]
+        results.append(("RandomForestClassifier", rf, acc))
 
-# #     # Split
-# #     X_train, X_test, y_train, y_test = train_test_split(
-# #         X, y, test_size=0.2, random_state=42
-# #     )
+    return results
 
-# #     # Models to try
-# #     models = {
-# #         "LogisticRegression": LogisticRegression(max_iter=200),
-# #         "DecisionTree": DecisionTreeClassifier(random_state=42),
-# #         "RandomForest": RandomForestClassifier(n_estimators=100, random_state=42),
-# #     }
+def save_best_model(results):
+    best_model_name, best_model, best_acc = max(results, key=lambda x: x[2])
+    os.makedirs(MODEL_DIR, exist_ok=True)
+    joblib.dump(best_model, MODEL_PATH)
+    print(f"Best model: {best_model_name} (Accuracy: {best_acc:.4f}) saved to {MODEL_PATH}")
 
-# #     results = []
-# #     for name, model in models.items():
-# #         with mlflow.start_run(run_name=name) as run:
-# #             # Train
-# #             model.fit(X_train, y_train)
+if __name__ == "__main__":
+    X, y = load_data()
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
-# #             # Predict & metric
-# #             preds = model.predict(X_test)
-# #             acc = float(accuracy_score(y_test, preds))
-
-# #             # Log params (safe subset), metrics, and model
-# #             mlflow.log_param("model_name", name)
-# #             try:
-# #                 # only log simple param types to avoid serialization problems
-# #                 safe_params = {k: v for k, v in model.get_params().items()
-# #                                if isinstance(v, (int, float, str, bool))}
-# #                 if safe_params:
-# #                     mlflow.log_params(safe_params)
-# #             except Exception:
-# #                 pass
-
-# #             mlflow.log_metric("accuracy", acc)
-
-# #             # input_example as DataFrame to help MLflow infer signature
-# #             input_example = X_train.head(1)
-
-# #             # Log & register model (registered_model_name will create a model version)
-# #             mlflow.sklearn.log_model(
-# #                 sk_model=model,
-# #                 artifact_path="model",               # artifact path under the run
-# #                 registered_model_name=REGISTERED_MODEL_NAME,
-# #                 input_example=input_example
-# #             )
-
-# #             results.append({"name": name, "accuracy": acc, "run_id": run.info.run_id})
-# #             print(f"[INFO] {name} logged. run_id={run.info.run_id} accuracy={acc:.4f}")
-
-# #     # Pick best model by validation accuracy
-# #     best = max(results, key=lambda r: r["accuracy"])
-# #     best_run_id = best["run_id"]
-# #     print(f"[INFO] Best model: {best['name']} (run_id={best_run_id}) accuracy={best['accuracy']:.4f}")
-
-# #     # Find the model version corresponding to the best_run_id (retry a few times)
-# #     model_version = None
-# #     for attempt in range(10):
-# #         try:
-# #             candidate_versions = client.search_model_versions(f"name = '{REGISTERED_MODEL_NAME}'")
-# #         except Exception:
-# #             candidate_versions = []
-# #         for v in candidate_versions:
-# #             # v may be a dict or an object with attributes
-# #             v_run_id = getattr(v, "run_id", None) or (v.get("run_id") if isinstance(v, dict) else None)
-# #             v_version = getattr(v, "version", None) or (v.get("version") if isinstance(v, dict) else None)
-# #             if v_run_id == best_run_id:
-# #                 model_version = str(v_version)
-# #                 break
-# #         if model_version:
-# #             break
-# #         time.sleep(1.0)
-
-# #     # If not found, explicitly register the model from the run artifact
-# #     if model_version is None:
-# #         print("[INFO] Could not find existing registered version for the best run; explicitly registering...")
-# #         mv = mlflow.register_model(f"runs:/{best_run_id}/model", REGISTERED_MODEL_NAME)
-# #         # mv should have .version
-# #         model_version = str(getattr(mv, "version", None) or mv.version)
-
-# #     print(f"[INFO] Best model registered as version {model_version}")
-
-# #     # Tag the model version with stage=Production (safe; avoids deprecated stage-transition API)
-# #     try:
-# #         client.set_model_version_tag(
-# #             name=REGISTERED_MODEL_NAME,
-# #             version=model_version,
-# #             key="stage",
-# #             value="Production"
-# #         )
-# #         print(f"[INFO] Tagged model {REGISTERED_MODEL_NAME} v{model_version} with stage=Production")
-# #     except Exception as e:
-# #         print(f"[WARN] Could not set model version tag: {e}")
-
-# #     print("[DONE]")
-
-
-# # if __name__ == "__main__":
-# #     main()
-
-
-# # # train.py
-# # import pandas as pd
-# # import mlflow
-# # import mlflow.sklearn
-# # from sklearn.datasets import load_iris
-# # from sklearn.model_selection import train_test_split
-# # from sklearn.ensemble import RandomForestClassifier
-# # from sklearn.metrics import accuracy_score
-
-# # if __name__ == "__main__":
-# #     # Load dataset
-# #     iris = load_iris(as_frame=True)
-# #     X = iris.data
-# #     y = iris.target
-
-# #     # Train-test split
-# #     X_train, X_test, y_train, y_test = train_test_split(
-# #         X, y, test_size=0.2, random_state=42
-# #     )
-
-# #     # Model
-# #     clf = RandomForestClassifier(n_estimators=100, random_state=42)
-# #     clf.fit(X_train, y_train)
-
-# #     # Evaluate
-# #     preds = clf.predict(X_test)
-# #     acc = accuracy_score(y_test, preds)
-# #     print(f"Accuracy: {acc}")
-
-# #     # Log model to MLflow
-# #     mlflow.set_tracking_uri("http://127.0.0.1:5000")  # Adjust if needed
-# #     mlflow.set_experiment("iris_classification")
-
-# #     with mlflow.start_run():
-# #         mlflow.log_metric("accuracy", acc)
-# #         mlflow.sklearn.log_model(clf, artifact_path="model")
+    results = train_and_log_models(X_train, X_test, y_train, y_test)
+    save_best_model(results)
