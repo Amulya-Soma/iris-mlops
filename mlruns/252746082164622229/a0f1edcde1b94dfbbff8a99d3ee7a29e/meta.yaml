@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/252746082164622229/a0f1edcde1b94dfbbff8a99d3ee7a29e/artifacts
+end_time: 1754824087806
+entry_point_name: ''
+experiment_id: '252746082164622229'
+lifecycle_stage: active
+run_id: a0f1edcde1b94dfbbff8a99d3ee7a29e
+run_name: RandomForest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754824083673
+status: 3
+tags: []
+user_id: samulya

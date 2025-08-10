@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/252746082164622229/cea47fdf41834c109d62ced4acb609ce/artifacts
+end_time: 1754824083644
+entry_point_name: ''
+experiment_id: '252746082164622229'
+lifecycle_stage: active
+run_id: cea47fdf41834c109d62ced4acb609ce
+run_name: DecisionTree
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754824079717
+status: 3
+tags: []
+user_id: samulya

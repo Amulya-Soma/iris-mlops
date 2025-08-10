@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/mlruns/166790800363550564/d053e6a5f95f481db8b9b71c1f9f1960/artifacts
+end_time: 1754823719838
+entry_point_name: ''
+experiment_id: '166790800363550564'
+lifecycle_stage: active
+run_id: d053e6a5f95f481db8b9b71c1f9f1960
+run_name: kindly-loon-801
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754823712871
+status: 3
+tags: []
+user_id: samulya

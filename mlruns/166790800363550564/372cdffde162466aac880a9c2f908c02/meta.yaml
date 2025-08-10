@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/mlruns/166790800363550564/372cdffde162466aac880a9c2f908c02/artifacts
+end_time: 1754823654617
+entry_point_name: ''
+experiment_id: '166790800363550564'
+lifecycle_stage: active
+run_id: 372cdffde162466aac880a9c2f908c02
+run_name: industrious-swan-61
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754823648171
+status: 4
+tags: []
+user_id: samulya

@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/mlruns/166790800363550564/b78d19a99266447db19d186e201e917f/artifacts
+end_time: 1754823591906
+entry_point_name: ''
+experiment_id: '166790800363550564'
+lifecycle_stage: active
+run_id: b78d19a99266447db19d186e201e917f
+run_name: adaptable-chimp-464
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754823585316
+status: 4
+tags: []
+user_id: samulya

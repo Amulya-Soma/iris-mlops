@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/534532878480993290/754bed15abf74df48b3b7e59c2641a02/artifacts
+end_time: 1754824898452
+entry_point_name: ''
+experiment_id: '534532878480993290'
+lifecycle_stage: active
+run_id: 754bed15abf74df48b3b7e59c2641a02
+run_name: nebulous-wren-902
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754824891963
+status: 3
+tags: []
+user_id: samulya

@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/samulya/Desktop/Academics/MLOPS/Assignment/mlruns/166790800363550564/models/m-e24a0b44cc0c459bb944ccfa3dd7d720/artifacts
+creation_timestamp: 1754823648252
+experiment_id: '166790800363550564'
+last_updated_timestamp: 1754823654481
+model_id: m-e24a0b44cc0c459bb944ccfa3dd7d720
+model_type: null
+name: iris_model
+source_run_id: 372cdffde162466aac880a9c2f908c02
+status: 2
+status_message: null
