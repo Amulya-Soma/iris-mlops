@@ -1,0 +1,26 @@
+Python artifacts
+pycache/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+Virtual envs
+.env/
+.venv/
+env/
+venv/
+
+VCS
+.git/
+.gitignore
+
+Caches
+.cache/
+.mypy_cache/
+.pytest_cache/
+**/.ipynb_checkpoints/
+
+ML/experiment (optional)
+mlruns/
+.dvc/
