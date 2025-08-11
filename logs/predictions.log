@@ -1,0 +1,6 @@
+2025-08-10 20:09:49,990 - INFO - Request: {'sepal_length': 6.0, 'sepal_width': 2.2, 'petal_length': 4.0, 'petal_width': 1.0} | Prediction: [1]
+2025-08-10 16:14:23,684 - INFO - Request: {'sepal_length': 5.1, 'sepal_width': 3.5, 'petal_length': 1.4, 'petal_width': 0.2} | Prediction: [0]
+2025-08-11 03:55:10,620 - INFO - Request: {'sepal_length': 6.0, 'sepal_width': 2.2, 'petal_length': 4.0, 'petal_width': 1.0} | Prediction: [1]
+2025-08-11 04:23:16,318 - INFO - Request: {'sepal_length': 6.9, 'sepal_width': 3.1, 'petal_length': 5.4, 'petal_width': 2.1} | Prediction: [2]
+2025-08-11 04:33:14,407 - INFO - Request: {'sepal_length': 5.1, 'sepal_width': 3.5, 'petal_length': 1.4, 'petal_width': 0.2} | Prediction: [0]
+2025-08-11 04:33:42,006 - INFO - Request: {'sepal_length': 6.9, 'sepal_width': 3.1, 'petal_length': 5.4, 'petal_width': 2.1} | Prediction: [2]
