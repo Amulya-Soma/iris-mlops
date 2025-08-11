@@ -14,10 +14,6 @@ OS/system files
 Thumbs.db
 AppData/
 
-Logs & temp files
-*.log
-*.tmp
-
 DVC cache & temp
 .dvc/cache/
 .dvc/tmp/

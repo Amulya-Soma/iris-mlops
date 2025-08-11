@@ -1,0 +1,1 @@
+2025-08-10 19:43:23,545 - INFO - Request: {'sepal_length': 5.1, 'sepal_width': 3.5, 'petal_length': 1.4, 'petal_width': 0.2} | Prediction: [0]

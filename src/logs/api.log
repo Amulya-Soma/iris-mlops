@@ -1,0 +1,6 @@
+2025-08-10 16:38:29,410 - INFO - Loading model from URI: models:/IrisClassifier/8
+2025-08-10 16:38:33,302 - INFO - Loaded model IrisClassifier version 8
+2025-08-10 16:39:14,124 - INFO - Loading model from URI: models:/IrisClassifier/8
+2025-08-10 16:39:18,050 - INFO - Loaded model IrisClassifier version 8
+2025-08-10 16:41:00,956 - INFO - Loading model from URI: models:/IrisClassifier/8
+2025-08-10 16:41:04,850 - INFO - Loaded model IrisClassifier version 8
